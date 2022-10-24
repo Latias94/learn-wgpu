@@ -19,7 +19,13 @@ const init = await import('./pkg/game.js');
 init().then(() => console.log("WASM Loaded"));
 ```
 
-html 示例：
+如果打算在一个普通的 HTML 网站中使用你的 WASM 模块，只需告诉 wasm-pack 以 web 为构建目标：
+
+```shell
+wasm-pack build --target web
+```
+
+然后就可以在一个 ES6 模块中运行 WASM 代码:
 
 ```html
 <!DOCTYPE html>
@@ -29,23 +35,22 @@ html 示例：
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pong with WASM</title>
+    <title>Learn WGPU</title>
+    <style>
+        canvas {
+            background-color: black;
+        }
+    </style>
 </head>
 
-<body>
-  <script type="module">
+<body id="wasm-example">
+<script type="module">
       import init from "./pkg/pong.js";
       init().then(() => {
           console.log("WASM Loaded");
       });
   </script>
-  <style>
-      canvas {
-          background-color: black;
-      }
-  </style>
 </body>
 
 </html>
-
 ```
