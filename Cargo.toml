@@ -1,0 +1,23 @@
+[workspace]
+resolver = "2"
+members = ["beginner/tutorial1_window", "beginner/tutorial2_surface"]
+
+[workspace.package]
+edition = "2021"
+rust-version = "1.64"
+
+[workspace.dependencies]
+winit = "0.27.1"
+env_logger = "0.9"
+log = "0.4"
+wgpu = "0.14"
+cfg-if = "1"
+pollster = "0.2"
+
+# wasm32 dependencies
+console_error_panic_hook = "0.1.6"
+console_log = "0.2.0"
+reqwest = { version = "0.11" }
+wasm-bindgen = "0.2.83"
+wasm-bindgen-futures = "0.4.30"
+web-sys = "0.3.60"
