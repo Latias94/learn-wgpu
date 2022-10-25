@@ -4,11 +4,11 @@
 
 ```shell
 # 在桌面环境本地运行
-cargo run --example tutorial2_surface
+cargo run --example tutorial2-surface
 # 在浏览器中运行：使用 WebGPU（需要使用 FireFox Nightly 或 Chrome Canary 并开启 WebGPU 试验功能）
-cargo run-wasm --example tutorial2_surface
+cargo run-wasm --example tutorial2-surface
 # 在浏览器中运行：使用 WebGL 2.0
-cargo run-wasm --example tutorial2_surface --features webgl
+cargo run-wasm --example tutorial2-surface --features webgl
 ```
 
 你可以只用 wasm-bindgen 来构建一个 wgpu 应用程序，但我在这样做的时候遇到了一些问题。首先，你需要在电脑上安装 wasm-bindgen，并将其作为一个依赖项。作为依赖关系的版本需要与你安装的版本完全一致，否则构建将会失败。

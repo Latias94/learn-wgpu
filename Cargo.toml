@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["beginner/tutorial1_window", "beginner/tutorial2_surface", "run-wasm"]
+members = ["beginner/tutorial1-window", "beginner/tutorial2-surface", "run-wasm"]
 
 [workspace.package]
 edition = "2021"

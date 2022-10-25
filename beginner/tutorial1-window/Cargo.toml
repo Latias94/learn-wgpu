@@ -9,7 +9,7 @@ rust-version.workspace = true
 crate-type = ["cdylib", "rlib"]
 
 [[example]]
-name = "tutorial1_window"
+name = "tutorial1-window"
 path = "src/main.rs"
 
 [features]
