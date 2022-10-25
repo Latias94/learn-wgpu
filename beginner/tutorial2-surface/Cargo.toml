@@ -9,7 +9,7 @@ crate-type = ["cdylib", "rlib"]
 
 [[example]]
 name = "tutorial2-surface"
-path = "src/main.rs"
+path = "src/entry.rs"
 
 [features]
 default = []

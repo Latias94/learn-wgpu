@@ -10,7 +10,7 @@ crate-type = ["cdylib", "rlib"]
 
 [[example]]
 name = "tutorial1-window"
-path = "src/main.rs"
+path = "src/entry.rs"
 
 [features]
 default = []
