@@ -1,5 +1,7 @@
 # wasm
 
+[Running on the Web with WebGPU and WebGL](https://github.com/gfx-rs/wgpu/wiki/Running-on-the-Web-with-WebGPU-and-WebGL#manual-compilation-with-wasm-bindgen-cli)
+
 你可以只用 wasm-bindgen 来构建一个 wgpu 应用程序，但我在这样做的时候遇到了一些问题。首先，你需要在电脑上安装 wasm-bindgen，并将其作为一个依赖项。作为依赖关系的版本需要与你安装的版本完全一致，否则构建将会失败。
 
 [wasm-pack](https://rustwasm.github.io/docs/wasm-pack/) 可以为你安装正确的 wasm-bindgen 版本，而且它还支持为不同类型的 web 目标进行构建：浏览器、NodeJS 和 webpack 等打包工具。
