@@ -2,6 +2,15 @@
 
 [Running on the Web with WebGPU and WebGL](https://github.com/gfx-rs/wgpu/wiki/Running-on-the-Web-with-WebGPU-and-WebGL#manual-compilation-with-wasm-bindgen-cli)
 
+```shell
+# 在桌面环境本地运行
+cargo run --example tutorial2_surface
+# 在浏览器中运行：使用 WebGPU（需要使用 FireFox Nightly 或 Chrome Canary 并开启 WebGPU 试验功能）
+cargo run-wasm --example tutorial2_surface
+# 在浏览器中运行：使用 WebGL 2.0
+cargo run-wasm --example tutorial2_surface --features webgl
+```
+
 你可以只用 wasm-bindgen 来构建一个 wgpu 应用程序，但我在这样做的时候遇到了一些问题。首先，你需要在电脑上安装 wasm-bindgen，并将其作为一个依赖项。作为依赖关系的版本需要与你安装的版本完全一致，否则构建将会失败。
 
 [wasm-pack](https://rustwasm.github.io/docs/wasm-pack/) 可以为你安装正确的 wasm-bindgen 版本，而且它还支持为不同类型的 web 目标进行构建：浏览器、NodeJS 和 webpack 等打包工具。
@@ -19,40 +28,4 @@ wasm-pack build game
 ```shell
 const init = await import('./pkg/game.js');
 init().then(() => console.log("WASM Loaded"));
-```
-
-如果打算在一个普通的 HTML 网站中使用你的 WASM 模块，只需告诉 wasm-pack 以 web 为构建目标：
-
-```shell
-wasm-pack build --target web
-```
-
-然后就可以在一个 ES6 模块中运行 WASM 代码:
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learn WGPU</title>
-    <style>
-        canvas {
-            background-color: black;
-        }
-    </style>
-</head>
-
-<body id="wasm-example">
-<script type="module">
-      import init from "./pkg/pong.js";
-      init().then(() => {
-          console.log("WASM Loaded");
-      });
-  </script>
-</body>
-
-</html>
 ```

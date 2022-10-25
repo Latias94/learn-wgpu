@@ -5,12 +5,15 @@ edition.workspace = true
 rust-version.workspace = true
 
 [lib]
-name = "tutorial2_surface_lib"
 crate-type = ["cdylib", "rlib"]
 
-[[bin]]
+[[example]]
 name = "tutorial2_surface"
 path = "src/main.rs"
+
+[features]
+default = []
+webgl = ["wgpu/webgl"]
 
 [dependencies]
 cfg-if.workspace = true
@@ -23,7 +26,6 @@ pollster.workspace = true
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 console_error_panic_hook.workspace = true
 console_log.workspace = true
-wgpu = { workspace = true, features = ["webgl"] }
 wasm-bindgen.workspace = true
 wasm-bindgen-futures.workspace = true
 web-sys = { workspace = true, features = [

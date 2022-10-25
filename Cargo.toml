@@ -21,3 +21,7 @@ reqwest = { version = "0.11" }
 wasm-bindgen = "0.2.83"
 wasm-bindgen-futures = "0.4.30"
 web-sys = "0.3.60"
+
+[workspace.dependencies.wgc]
+package = "wgpu-core"
+version = "0.14"
