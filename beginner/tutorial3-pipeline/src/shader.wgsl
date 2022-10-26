@@ -1,4 +1,5 @@
 struct VertexOutput {
+    // 标记了此字段将作为顶点在裁剪坐标系中的位置来使用。这类似于 GLSL 的 gl_Position 变量。
     @builtin(position) clip_position: vec4<f32>,
 };
 

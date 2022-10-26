@@ -1,4 +1,5 @@
-use wgpu::include_wgsl;
+use wgpu::util::DeviceExt;
+use wgpu::{include_wgsl, IndexFormat};
 use winit::{
     event::*,
     event_loop::{ControlFlow, EventLoop},
@@ -6,10 +7,67 @@ use winit::{
 };
 
 #[repr(C)]
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 struct Vertex {
     position: [f32; 3],
     color: [f32; 3],
+}
+
+// 120 个字节
+const VERTICES: &[Vertex] = &[
+    Vertex {
+        position: [-0.0868241, 0.49240386, 0.0],
+        color: [0.5, 0.0, 0.5],
+    }, // A
+    Vertex {
+        position: [-0.49513406, 0.06958647, 0.0],
+        color: [0.5, 0.0, 0.5],
+    }, // B
+    Vertex {
+        position: [-0.21918549, -0.44939706, 0.0],
+        color: [0.5, 0.0, 0.5],
+    }, // C
+    Vertex {
+        position: [0.35966998, -0.3473291, 0.0],
+        color: [0.5, 0.0, 0.5],
+    }, // D
+    Vertex {
+        position: [0.44147372, 0.2347359, 0.0],
+        color: [0.5, 0.0, 0.5],
+    }, // E
+];
+
+// 只有 18 个字节，因为 u16 类型是 2 个字节长。在这种情况下，wgpu 会自动增加 2 个字节的填充，
+// 以确保缓冲区被对齐到 4 个字节，但它仍然只有 20 个字节。
+const INDICES: &[u16] = &[0, 1, 4, 1, 2, 4, 2, 3, 4];
+
+impl Vertex {
+    const ATTRIBS: [wgpu::VertexAttribute; 2] =
+        wgpu::vertex_attr_array![0 => Float32x3, 1 => Float32x3];
+
+    fn desc<'a>() -> wgpu::VertexBufferLayout<'a> {
+        // wgpu::VertexBufferLayout {
+        //     array_stride: std::mem::size_of::<Vertex>() as wgpu::BufferAddress,
+        //     step_mode: wgpu::VertexStepMode::Vertex,
+        //     attributes: &[
+        //         wgpu::VertexAttribute {
+        //             offset: 0,
+        //             shader_location: 0,
+        //             format: wgpu::VertexFormat::Float32x3,
+        //         },
+        //         wgpu::VertexAttribute {
+        //             offset: std::mem::size_of::<[f32; 3]>() as wgpu::BufferAddress,
+        //             shader_location: 1,
+        //             format: wgpu::VertexFormat::Float32x3,
+        //         }
+        //     ]
+        // }
+        wgpu::VertexBufferLayout {
+            array_stride: std::mem::size_of::<Vertex>() as wgpu::BufferAddress,
+            step_mode: wgpu::VertexStepMode::Vertex,
+            attributes: &Self::ATTRIBS,
+        }
+    }
 }
 
 struct State {
@@ -19,6 +77,9 @@ struct State {
     config: wgpu::SurfaceConfiguration,
     size: winit::dpi::PhysicalSize<u32>,
     render_pipeline: wgpu::RenderPipeline,
+    vertex_buffer: wgpu::Buffer,
+    index_buffer: wgpu::Buffer,
+    num_indices: u32,
 }
 
 impl State {
@@ -82,7 +143,7 @@ impl State {
             vertex: wgpu::VertexState {
                 module: &shader,
                 entry_point: "vs_main",
-                buffers: &[],
+                buffers: &[Vertex::desc()],
             },
             fragment: Some(wgpu::FragmentState {
                 module: &shader,
@@ -113,6 +174,20 @@ impl State {
             },
             multiview: None,
         });
+
+        let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Vertex Buffer"),
+            contents: bytemuck::cast_slice(VERTICES),
+            usage: wgpu::BufferUsages::VERTEX,
+        });
+        let index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Index Buffer"),
+            contents: bytemuck::cast_slice(INDICES),
+            usage: wgpu::BufferUsages::INDEX,
+        });
+
+        let num_indices = INDICES.len() as u32;
+
         Self {
             surface,
             device,
@@ -120,6 +195,9 @@ impl State {
             config,
             size,
             render_pipeline,
+            vertex_buffer,
+            index_buffer,
+            num_indices,
         }
     }
 
@@ -170,7 +248,9 @@ impl State {
             });
             // or drop(render_pass) to release borrow `encoder`
             render_pass.set_pipeline(&self.render_pipeline);
-            render_pass.draw(0..3, 0..1);
+            render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
+            render_pass.set_index_buffer(self.index_buffer.slice(..), IndexFormat::Uint16);
+            render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
         }
 
         // submit 命令能接受任何实现了 IntoIter trait 的参数
