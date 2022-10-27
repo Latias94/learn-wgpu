@@ -6,7 +6,7 @@
 # 在桌面环境本地运行
 cargo run --example tutorial2-surface
 # 在浏览器中运行：使用 WebGPU（需要使用 FireFox Nightly 或 Chrome Canary 并开启 WebGPU 试验功能）
-cargo run-wasm --example tutorial2-surface
+cargo run-wasm --example tutorial1-window
 # 在浏览器中运行：使用 WebGL 2.0
 cargo run-wasm --example tutorial2-surface --features webgl
 ```
