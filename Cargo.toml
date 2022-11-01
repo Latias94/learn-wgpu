@@ -16,6 +16,7 @@ pollster = "0.2"
 bytemuck = "1.12"
 image = "0.24"
 anyhow = "1.0"
+cgmath = "0.18"
 
 # wasm32 dependencies
 console_error_panic_hook = "0.1.6"
