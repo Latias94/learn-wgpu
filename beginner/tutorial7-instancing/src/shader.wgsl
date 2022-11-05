@@ -1,3 +1,10 @@
+struct InstanceInput {
+    @location(5) model_matrix_0: vec4<f32>,
+    @location(6) model_matrix_1: vec4<f32>,
+    @location(7) model_matrix_2: vec4<f32>,
+    @location(8) model_matrix_3: vec4<f32>,
+};
+
 // 顶点着色器
 struct CameraUniform {
     view_proj: mat4x4<f32>,
@@ -19,11 +26,17 @@ struct VertexOutput {
 };
 
 @vertex
-fn vs_main(model: VertexInput) -> VertexOutput {
+fn vs_main(model: VertexInput, instance: InstanceInput) -> VertexOutput {
+ let model_matrix = mat4x4<f32>(
+        instance.model_matrix_0,
+        instance.model_matrix_1,
+        instance.model_matrix_2,
+        instance.model_matrix_3,
+    );
     var out: VertexOutput;
     out.tex_coords = model.tex_coords;
     // 当涉及到矩阵时，乘法的顺序很重要。向量在最右边，矩阵按重要性顺序在左边（裁剪空间坐标 = 投影矩阵 x 模型视图矩阵 x 位置向量）。
-    out.clip_position = camera.view_proj * vec4<f32>(model.position, 1.0);
+    out.clip_position = camera.view_proj  * model_matrix * vec4<f32>(model.position, 1.0);
     return out;
 }
 

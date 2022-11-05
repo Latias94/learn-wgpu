@@ -60,11 +60,11 @@ pub fn run() {
             WindowEvent::CloseRequested
             | WindowEvent::KeyboardInput {
                 input:
-                KeyboardInput {
-                    state: ElementState::Pressed,
-                    virtual_keycode: Some(VirtualKeyCode::Escape),
-                    ..
-                },
+                    KeyboardInput {
+                        state: ElementState::Pressed,
+                        virtual_keycode: Some(VirtualKeyCode::Escape),
+                        ..
+                    },
                 ..
             } => *control_flow = ControlFlow::Exit,
             _ => {}

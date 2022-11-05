@@ -1,7 +1,7 @@
 use winit::{
     event::*,
     event_loop::{ControlFlow, EventLoop},
-    window::{Window,WindowBuilder},
+    window::{Window, WindowBuilder},
 };
 
 struct State {
